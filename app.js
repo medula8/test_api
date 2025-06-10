@@ -1,5 +1,6 @@
 // app.js
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth_routes");
@@ -9,11 +10,30 @@ const errorHandler = require("./middlewares/error_middleware");
 const app = express();
 let server = null; // Referência para o servidor
 
+//Configuração do CORS
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "Origin",
+      "X-Requested-With",
+    ],
+    exposedHeaders: ["Content-Range", "X-Requested-With"],
+    maxAge: 86400,
+  })
+);
+ 
+
 // Middlewares
 app.use(express.json());
 
 // Rotas públicas
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.status(200).json({ msg: "Bem-vindo à API!" });
 });
 
